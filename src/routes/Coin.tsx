@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
-import { Switch, Route, useLocation, useParams, Link, useRouteMatch } from "react-router-dom";
+import { useQuery } from "react-query";
+import {
+  Switch,
+  Route,
+  useLocation,
+  useParams,
+  Link,
+  useRouteMatch,
+} from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 
@@ -50,7 +59,7 @@ const Tabs = styled.div`
   margin: 25px 0px;
   gap: 10px;
 `;
-const Tab = styled.span<{isActive:boolean}>`
+const Tab = styled.span<{ isActive: boolean }>`
   text-align: center;
   text-transform: uppercase;
   font-size: 12px;
@@ -58,8 +67,9 @@ const Tab = styled.span<{isActive:boolean}>`
   background-color: rgba(0, 0, 0, 0.5);
   padding: 7px 0px;
   border-radius: 10px;
-  color: ${(props) => props.isActive ? props.theme.accentColor : props.theme.textColor};
-  a{
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+  a {
     display: block;
   }
 `;
@@ -128,14 +138,23 @@ interface PriceData {
 }
 
 function Coin() {
-  const [loading, setLoading] = useState(true);
   const { coinId } = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
-  const [info, setInfo] = useState<InfoData>();
-  const [priceInfo, setPriceInfo] = useState<PriceData>();
   const priceMatch = useRouteMatch("/:coinId/price");
   const chartMatch = useRouteMatch("/:coinId/chart");
-
+  const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+    ["info", coinId],
+    () => fetchCoinInfo(coinId)
+  );
+  const { isLoading: tickerLoading, data: tickerData } = useQuery<PriceData>(
+    ["tickers", coinId],
+    () => fetchCoinTickers(coinId)
+  );
+  /*
+  const [loading, setLoading] = useState(true);
+  const [info, setInfo] = useState<InfoData>();
+  const [priceInfo, setPriceInfo] = useState<PriceData>();
+  
   useEffect(() => {
     (async () => {
       const infoData = await (
@@ -149,12 +168,13 @@ function Coin() {
       setLoading(false); //해당 코드가 없다면 계속 loading상태에 머물러 있을 것이다.주의!
     })();
   }, [coinId]);
-
+  */
+  const loading = infoLoading || tickerLoading;
   return (
     <Container>
       <Header>
         <Title>
-          {state?.name ? state.name : loading ?  "Loading..." : info?.name}
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
       {loading ? (
@@ -164,26 +184,26 @@ function Coin() {
           <Overview>
             <OverviewItem>
               <span>Rank: </span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Symbol: </span>
-              <span>{info?.symbol}</span>
+              <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Open Source: </span>
-              <span>{info?.open_source ? "Yes" : "No"}</span>
+              <span>{infoData?.open_source ? "Yes" : "No"}</span>
             </OverviewItem>
           </Overview>
-          <Deescription>{info?.description}</Deescription>
+          <Deescription>{infoData?.description}</Deescription>
           <Overview>
             <OverviewItem>
               <span>Total Suply: </span>
-              <span>{priceInfo?.total_supply}</span>
+              <span>{tickerData?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Max Suply: </span>
-              <span>{priceInfo?.max_supply}</span>
+              <span>{tickerData?.max_supply}</span>
             </OverviewItem>
           </Overview>
 
