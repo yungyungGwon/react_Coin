@@ -1,6 +1,10 @@
 import Router from "./Router";
+import { useState } from "react";
+import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme } from "./thems";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -67,13 +71,82 @@ a {
 }
 `;
 
+const ToggleBox = styled.div`
+  position: relative;
+  cursor: pointer;
+  float: right;
+  margin: 10px 15px 0px 0px;
+  .toggle-container {
+    width: 60px;
+    height: 34px;
+    border-radius: 30px;
+    background-color: #ccc;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 22px;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    &.toggle--checked {
+      background-color: #2f3640;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+    }
+  }
+  .toggle-circle {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    &.toggle--checked {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+  }
+`;
+
 function App() {
+  const [theme, setTheme] = useState("light");
+  const handleToggle = () => {
+    if (theme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  };
+
   return (
-    <>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
-    </>
+    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+      <>
+        <GlobalStyle />
+        <ToggleBox onClick={handleToggle}>
+          <div
+            className={`toggle-container ${
+              theme === "light" ? "toggle--checked" : ""
+            }`}
+          >
+            <div>🌛</div>
+            <div>🌞</div>
+          </div>
+          <div
+            className={`toggle-circle ${
+              theme === "light" ? "toggle--checked" : ""
+            }`}
+          />
+        </ToggleBox>
+
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </>
+    </ThemeProvider>
   );
 }
 
