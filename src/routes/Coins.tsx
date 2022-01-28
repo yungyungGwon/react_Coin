@@ -35,6 +35,7 @@ const Coin = styled.li`
 `;
 const Title = styled.h1`
   font-size: 48px;
+  font-weight: 600;
   color: ${(props) => props.theme.accentColor};
 `;
 const Loader = styled.span`
@@ -45,6 +46,10 @@ const Img = styled.img`
   width: 35px;
   height: 35px;
   margin-right: 10px;
+`;
+const CoinName = styled.span`
+  font-size:20px;
+  font-weight:400;
 `;
 
 interface ICoin {
@@ -93,7 +98,7 @@ function Coins() {
                 <Img
                   src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLocaleLowerCase()}`}
                 />
-                {coin.name} &rarr;
+                <CoinName>{coin.name} &rarr;</CoinName>
               </Link>
             </Coin>
           ))}

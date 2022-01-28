@@ -17,11 +17,14 @@ const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;
   margin: 0 auto;
+  font-size: 20px;
+  font-weight: 450;
 `;
 const Header = styled.header`
   height: 10vh;
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: flex-satart;
   align-items: center;
 `;
 const Loader = styled.span`
@@ -29,7 +32,19 @@ const Loader = styled.span`
   display: block;
 `;
 const Title = styled.h1`
+  width: 90%;
+  text-align: center;
   font-size: 48px;
+  font-weight: 600;
+  color: ${(props) => props.theme.accentColor};
+`;
+const BackBtn = styled.div`
+  width: 34px;
+  height: 34px;
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 20%;
   color: ${(props) => props.theme.accentColor};
 `;
 const Overview = styled.div`
@@ -44,8 +59,8 @@ const OverviewItem = styled.div`
   flex-direction: column;
   align-items: center;
   span:first-child {
-    font-size: 10px;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 450;
     text-transform: uppercase;
     margin-bottom: 5px;
   }
@@ -62,8 +77,8 @@ const Tabs = styled.div`
 const Tab = styled.span<{ isActive: boolean }>`
   text-align: center;
   text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 450;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 7px 0px;
   border-radius: 10px;
@@ -182,6 +197,9 @@ function Coin() {
         </title>
       </Helmet>
       <Header>
+        <Link to={`/`}>
+          <BackBtn> &larr; </BackBtn>
+        </Link>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
@@ -226,11 +244,11 @@ function Coin() {
           </Tabs>
 
           <Switch>
-            <Route path={`/${coinId}/price`}>
-              <Price />
-            </Route>
             <Route path={`/${coinId}/chart`}>
               <Chart coinId={coinId} />
+            </Route>
+            <Route path={`/${coinId}/price`}>
+              <Price coinId={coinId} />
             </Route>
           </Switch>
         </>

@@ -114,7 +114,7 @@ const ToggleBox = styled.div`
 `;
 
 function App() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   const handleToggle = () => {
     if (theme === "light") {
       setTheme("dark");
@@ -142,7 +142,6 @@ function App() {
             }`}
           />
         </ToggleBox>
-
         <Router />
         <ReactQueryDevtools initialIsOpen={true} />
       </>

@@ -23,43 +23,28 @@ function Chart({ coinId }: ChartProps) {
     { refetchInterval: 10000 }
   );
   console.log(data?.map((price) => price.close));
+  console.log(data?.map(function(date, ohlc){
+    var list = {}
+    list[date.time_close] = [date.open, date.low, date.high, date.close] ;
+
+  }));
   return (
     <div>
       {isLoading ? (
         "Loading..."
       ) : (
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[{ name: "Price", data: data?.map((price) => price.close) }]}
           options={{
-            theme: { mode: "dark" },
-            chart: {
-              width: 500,
-              height: 300,
-              toolbar: { show: false },
-              background: "transparent",
-            },
-            grid: { show: false },
-            stroke: {
-              curve: "smooth",
-              width: 4,
-            },
-            yaxis: { show: false },
-            xaxis: {
-              axisBorder: { show: false },
-              axisTicks: { show: false },
-              labels: { show: false },
-              type: "datetime",
-              categories: data?.map((price) => price.time_close),
-            },
-            fill: {
-              type: "gradient",
-              gradient: { gradientToColors: ["#0be881"], stops: [0, 100] },
-            },
-            colors: ["#0fbcf9"],
-            tooltip: {
-              y: { formatter: (value) => `$${value.toFixed(5)}` },
-            },
+            plotOptions: {
+              candlestick: {
+                colors: {
+                  upward: '#3C90EB',
+                  downward: '#DF7D46'
+                }
+              }
+            }
           }}
         />
       )}
