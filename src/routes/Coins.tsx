@@ -91,7 +91,7 @@ function Coins() {
             <Coin key={coin.id}>
               <Link
                 to={{
-                  pathname: process.env.PUBLIC_URL + `/${coin.id}`,
+                  pathname:`/${coin.id}`,
                   state: { name: coin.name },
                 }}
               >
