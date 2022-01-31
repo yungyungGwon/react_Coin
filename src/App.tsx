@@ -142,7 +142,7 @@ function App() {
             }`}
           />
         </ToggleBox>
-        <Router />
+        <Router theme={theme} />
         <ReactQueryDevtools initialIsOpen={true} />
       </>
     </ThemeProvider>

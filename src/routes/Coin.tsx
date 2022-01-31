@@ -152,7 +152,11 @@ interface PriceData {
   };
 }
 
-function Coin() {
+interface ICoinProps{
+  theme:string;
+}
+
+function Coin({theme}:ICoinProps) {
   const { coinId } = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
   const priceMatch = useRouteMatch("/:coinId/price");
@@ -197,7 +201,7 @@ function Coin() {
         </title>
       </Helmet>
       <Header>
-        <Link to="/">
+        <Link to={process.env.PUBLIC_URL + "/"}>
           <BackBtn> &larr; </BackBtn>
         </Link>
         <Title>
@@ -236,19 +240,19 @@ function Coin() {
 
           <Tabs>
             <Tab isActive={chartMatch !== null}>
-              <Link to={`/${coinId}/chart`}>Chart</Link>
+              <Link to={process.env.PUBLIC_URL +`/${coinId}/chart`}>Chart</Link>
             </Tab>
             <Tab isActive={priceMatch !== null}>
-              <Link to={`/${coinId}/price`}>Price</Link>
+              <Link to={process.env.PUBLIC_URL +`/${coinId}/price`}>Price</Link>
             </Tab>
           </Tabs>
 
           <Switch>
-            <Route path={`/${coinId}/chart`}>
-              <Chart coinId={coinId} />
+            <Route path={process.env.PUBLIC_URL +`/${coinId}/chart`}>
+              <Chart theme= {theme} coinId={coinId} />
             </Route>
-            <Route path={`/${coinId}/price`}>
-              <Price coinId={coinId} />
+            <Route path={process.env.PUBLIC_URL +`/${coinId}/price`}>
+              <Price theme= {theme} coinId={coinId} />
             </Route>
           </Switch>
         </>

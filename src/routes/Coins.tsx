@@ -62,6 +62,7 @@ interface ICoin {
   type: string;
 }
 
+
 function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
   /*
@@ -91,7 +92,7 @@ function Coins() {
             <Coin key={coin.id}>
               <Link
                 to={{
-                  pathname:`/${coin.id}`,
+                  pathname:process.env.PUBLIC_URL + `/${coin.id}`,
                   state: { name: coin.name },
                 }}
               >
